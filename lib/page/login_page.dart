@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'role_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,6 +22,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final role = ModalRoute.of(context)?.settings.arguments as String? ?? 'worker';
+
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
       body: Center(
@@ -137,8 +138,8 @@ class _LoginPageState extends State<LoginPage> {
                           Expanded(
                             child: TabBarView(
                               children: [
-                                _buildLoginForm(context),
-                                _buildRegisterForm(),
+                                _buildLoginForm(context, role),
+                                _buildRegisterForm(context, role),
                               ],
                             ),
                           ),
@@ -155,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginForm(BuildContext context) {
+  Widget _buildLoginForm(BuildContext context, String role) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,10 +246,10 @@ class _LoginPageState extends State<LoginPage> {
             height: 44,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RolePage()),
-                );
+                final route = role == 'hrd'
+                    ? '/hrd/dashboard'
+                    : '/pekerja/dashboard';
+                Navigator.pushReplacementNamed(context, route);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2E6B38),
@@ -291,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildRegisterForm() {
+  Widget _buildRegisterForm(BuildContext context, String role) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,9 +334,10 @@ class _LoginPageState extends State<LoginPage> {
             height: 44,
             child: ElevatedButton(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Pendaftaran berhasil dimulai.')),
-                );
+                final route = role == 'hrd'
+                    ? '/hrd/dashboard'
+                    : '/pekerja/dashboard';
+                Navigator.pushReplacementNamed(context, route);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2E6B38),

@@ -89,6 +89,8 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
           _sidebarItem(Icons.work_outline, 'Jobs'),
           _sidebarItem(Icons.groups_outlined, 'Talent'),
           _sidebarItem(Icons.description_outlined, 'Applications', isActive: true),
+          _sidebarItem(Icons.timeline, 'Tracking'),
+          _sidebarItem(Icons.person_outline, 'Profile'),
           const Spacer(),
           _sidebarItem(Icons.settings_outlined, 'Settings'),
           const SizedBox(height: 12),
@@ -133,6 +135,8 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
             'Jobs': '/hrd/management',
             'Talent': '/hrd/talent',
             'Applications': '/hrd/applications',
+            'Tracking': '/hrd/tracking',
+            'Profile': '/hrd/profile',
             'Settings': '/hrd/settings',
           };
           final route = routes[title];

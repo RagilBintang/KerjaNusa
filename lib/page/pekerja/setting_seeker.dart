@@ -144,7 +144,7 @@ class _SettingSeekerPageState extends State<SettingSeekerPage> {
           const routes = {
             'Dashboard': '/pekerja/dashboard',
             'Find Jobs': '/pekerja/find-jobs',
-            'Application': '/hrd/applications',
+            'Application': '/pekerja/applications',
             'Profile': '/pekerja/profile',
             'Settings': '/pekerja/settings',
           };

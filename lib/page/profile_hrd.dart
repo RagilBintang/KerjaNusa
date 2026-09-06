@@ -77,6 +77,8 @@ class _ProfileHrdPageState extends State<ProfileHrdPage> {
           _sidebarItem(Icons.work_outline, 'Jobs'),
           _sidebarItem(Icons.groups_outlined, 'Talent'),
           _sidebarItem(Icons.description_outlined, 'Applications'),
+          _sidebarItem(Icons.timeline, 'Tracking'),
+          _sidebarItem(Icons.settings_outlined, 'Settings'),
           _sidebarItem(Icons.person_outline, 'Profile', isActive: true),
           const Spacer(),
           ElevatedButton.icon(
@@ -120,6 +122,8 @@ class _ProfileHrdPageState extends State<ProfileHrdPage> {
             'Jobs': '/hrd/management',
             'Talent': '/hrd/talent',
             'Applications': '/hrd/applications',
+            'Tracking': '/hrd/tracking',
+            'Profile': '/hrd/profile',
             'Settings': '/hrd/settings',
           };
           final route = routes[title];

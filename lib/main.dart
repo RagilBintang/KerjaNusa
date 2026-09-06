@@ -45,6 +45,7 @@ class KaryaLokalApp extends StatelessWidget {
         // Pekerja Routes
         '/pekerja/dashboard': (context) => const DashborPekerjaPage(),
         '/pekerja/find-jobs': (context) => const FindJobsPage(),
+        '/pekerja/applications': (context) => const DashborPekerjaPage(),
 
         '/pekerja/profile': (context) => const ProfilePekerjaPage(),
         '/pekerja/settings': (context) => const SettingSeekerPage(),

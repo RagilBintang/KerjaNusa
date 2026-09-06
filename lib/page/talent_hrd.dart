@@ -87,6 +87,8 @@ class _DiscoverTalentPageState extends State<DiscoverTalentPage> {
           _sidebarItem(Icons.work_outline, 'Jobs'),
           _sidebarItem(Icons.groups_outlined, 'Talent', isActive: true),
           _sidebarItem(Icons.description_outlined, 'Applications'),
+          _sidebarItem(Icons.timeline, 'Tracking'),
+          _sidebarItem(Icons.person_outline, 'Profile'),
           const Spacer(),
           _sidebarItem(Icons.settings_outlined, 'Settings'),
           const SizedBox(height: 12),
@@ -131,6 +133,8 @@ class _DiscoverTalentPageState extends State<DiscoverTalentPage> {
             'Jobs': '/hrd/management',
             'Talent': '/hrd/talent',
             'Applications': '/hrd/applications',
+            'Tracking': '/hrd/tracking',
+            'Profile': '/hrd/profile',
             'Settings': '/hrd/settings',
           };
           final route = routes[title];

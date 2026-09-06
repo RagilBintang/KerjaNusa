@@ -172,7 +172,20 @@ class _DashborPekerjaPageState extends State<DashborPekerjaPage> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6.0),
       child: InkWell(
-        onTap: () => setState(() => _selectedNavIndex = index),
+        onTap: () {
+          setState(() => _selectedNavIndex = index);
+          const routes = {
+            'Dashboard': '/pekerja/dashboard',
+            'Find Jobs': '/pekerja/find-jobs',
+            'Application': '/pekerja/applications',
+            'Profile': '/pekerja/profile',
+            'Settings': '/pekerja/settings',
+          };
+          final route = routes[label];
+          if (route != null && route != '/pekerja/dashboard') {
+            Navigator.pushReplacementNamed(context, route);
+          }
+        },
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

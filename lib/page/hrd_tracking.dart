@@ -97,6 +97,7 @@ class ApplicationsPage extends StatelessWidget {
                 _sidebarItem(context, Icons.work_outline, 'Jobs'),
                 _sidebarItem(context, Icons.group_outlined, 'Talent'),
                 _sidebarItem(context, Icons.description, 'Applications', isActive: true),
+                _sidebarItem(context, Icons.person_outline, 'Profile'),
                 _sidebarItem(context, Icons.settings_outlined, 'Settings'),
               ],
             ),
@@ -146,6 +147,7 @@ class ApplicationsPage extends StatelessWidget {
             'Jobs': '/hrd/management',
             'Talent': '/hrd/talent',
             'Applications': '/hrd/applications',
+            'Profile': '/hrd/profile',
             'Settings': '/hrd/settings',
           };
           final route = routes[title];

@@ -109,6 +109,8 @@ class DashboardHRD extends StatelessWidget {
           _buildSidebarMenuItem(
               context: context,
               icon: Icons.assignment_outlined, title: 'Applications'),
+            _buildSidebarMenuItem(context: context, icon: Icons.timeline, title: 'Tracking'),
+            _buildSidebarMenuItem(context: context, icon: Icons.person_outline, title: 'Profile'),
           _buildSidebarMenuItem(
               context: context,
               icon: Icons.settings_outlined, title: 'Settings'),
@@ -184,6 +186,8 @@ class DashboardHRD extends StatelessWidget {
             'Jobs': '/hrd/management',
             'Talent': '/hrd/talent',
             'Applications': '/hrd/applications',
+            'Tracking': '/hrd/tracking',
+            'Profile': '/hrd/profile',
             'Settings': '/hrd/settings',
           };
           final route = routes[title];

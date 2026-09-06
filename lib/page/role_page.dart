@@ -122,7 +122,11 @@ class _RolePageState extends State<RolePage> {
                                 activeColor: const Color(0xFF386633),
                                 buttonText: 'Masuk sebagai Pencari Kerja',
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/login');
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/login',
+                                    arguments: 'worker',
+                                  );
                                 },
                               ),
                             ),
@@ -141,7 +145,11 @@ class _RolePageState extends State<RolePage> {
                                 activeColor: const Color(0xFFA64B2A),
                                 buttonText: 'Masuk sebagai Pemilik Bisnis',
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/login');
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/login',
+                                    arguments: 'hrd',
+                                  );
                                 },
                               ),
                             ),
@@ -166,7 +174,11 @@ class _RolePageState extends State<RolePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamed(
+                        context,
+                        '/login',
+                        arguments: 'worker',
+                      );
                     },
                     child: const Text(
                       'Masuk di sini',

@@ -105,6 +105,8 @@ class _SettingsPageState extends State<SettingsPage> {
           _sidebarItem(Icons.work_outline, 'Jobs'),
           _sidebarItem(Icons.groups_outlined, 'Talent'),
           _sidebarItem(Icons.description_outlined, 'Applications'),
+          _sidebarItem(Icons.timeline, 'Tracking'),
+          _sidebarItem(Icons.person_outline, 'Profile'),
           const Spacer(),
           _sidebarItem(Icons.settings_outlined, 'Settings', isActive: true),
           const SizedBox(height: 12),
@@ -149,6 +151,8 @@ class _SettingsPageState extends State<SettingsPage> {
             'Jobs': '/hrd/management',
             'Talent': '/hrd/talent',
             'Applications': '/hrd/applications',
+            'Tracking': '/hrd/tracking',
+            'Profile': '/hrd/profile',
             'Settings': '/hrd/settings',
           };
           final route = routes[title];
