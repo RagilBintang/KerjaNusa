@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../service/app_feedback.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -340,7 +340,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           const Text('Industry', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: textDark)),
                           const SizedBox(height: 6),
                           DropdownButtonFormField<String>(
-                            value: selectedIndustry,
+                            initialValue: selectedIndustry,
                             items: const [
                               DropdownMenuItem(value: 'Retail & Crafts', child: Text('Retail & Crafts', style: TextStyle(fontSize: 13))),
                             ],
@@ -471,7 +471,7 @@ class _SettingsPageState extends State<SettingsPage> {
         Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: primaryBrown,
+          activeThumbColor: primaryBrown,
         ),
       ],
     );

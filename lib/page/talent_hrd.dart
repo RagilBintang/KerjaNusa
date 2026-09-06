@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../service/app_feedback.dart';
 
 class DiscoverTalentPage extends StatefulWidget {
-  const DiscoverTalentPage({Key? key}) : super(key: key);
+  const DiscoverTalentPage({super.key});
 
   @override
   State<DiscoverTalentPage> createState() => _DiscoverTalentPageState();

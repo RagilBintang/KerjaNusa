@@ -121,7 +121,7 @@ class DashboardHRD extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () => AppFeedback.show('Form posting lowongan siap digunakan.'),
+              onPressed: () => Navigator.pushNamed(context, '/hrd/create-job'),
               icon: const Icon(Icons.add, color: Colors.white, size: 18),
               label: const Text(
                 'Post a Job',

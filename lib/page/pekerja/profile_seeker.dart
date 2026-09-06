@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../service/app_feedback.dart';
 
 class ProfilePekerjaPage extends StatefulWidget {
-  const ProfilePekerjaPage({Key? key}) : super(key: key);
+  const ProfilePekerjaPage({super.key});
 
   @override
   State<ProfilePekerjaPage> createState() => _ProfilePekerjaPageState();
@@ -880,7 +880,7 @@ class _ProfilePekerjaPageState extends State<ProfilePekerjaPage> {
 class _IconDetail extends StatelessWidget {
   final IconData icon;
   final String label;
-  const _IconDetail(this.icon, this.label, {Key? key}) : super(key: key);
+  const _IconDetail(this.icon, this.label);
 
   @override
   Widget build(BuildContext context) {

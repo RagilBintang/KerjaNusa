@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../service/app_feedback.dart';
 
 class SettingSeekerPage extends StatefulWidget {
-  const SettingSeekerPage({Key? key}) : super(key: key);
+  const SettingSeekerPage({super.key});
 
   @override
   State<SettingSeekerPage> createState() => _SettingSeekerPageState();
@@ -836,7 +836,7 @@ class _SettingSeekerPageState extends State<SettingSeekerPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(label, style: const TextStyle(fontSize: 11, color: textMuted, fontWeight: FontWeight.w500)),
-            if (badge != null) badge,
+            ?badge,
           ],
         ),
         const SizedBox(height: 6),
@@ -858,7 +858,7 @@ class _SettingSeekerPageState extends State<SettingSeekerPage> {
                   ),
                 ),
               ),
-              if (suffix != null) suffix,
+              ?suffix,
             ],
           ),
         ),
@@ -903,7 +903,7 @@ class _SettingSeekerPageState extends State<SettingSeekerPage> {
         Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: primaryBrown,
+          activeThumbColor: primaryBrown,
         )
       ],
     );

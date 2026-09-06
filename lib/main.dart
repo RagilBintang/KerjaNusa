@@ -19,6 +19,7 @@ import 'page/talent_hrd.dart';
 import 'page/aplication.dart' as application;
 import 'page/profile_hrd.dart';
 import 'page/settings_hrd.dart';
+import 'page/create_job_page.dart';
 
 void main() {
   runApp(const KaryaLokalApp());
@@ -58,6 +59,7 @@ class KaryaLokalApp extends StatelessWidget {
         '/hrd/applications': (context) => const application.ApplicationsPage(),
         '/hrd/profile': (context) => const ProfileHrdPage(),
         '/hrd/settings': (context) => const SettingsPage(),
+        '/hrd/create-job': (context) => const CreateJobPage(),
       },
     );
   }

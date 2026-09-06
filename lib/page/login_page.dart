@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../service/api_client.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,20 +10,57 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
+  bool _loading = false;
+  final ApiClient _apiClient = ApiClient();
 
   final TextEditingController _loginEmailController = TextEditingController();
-  final TextEditingController _loginPasswordController = TextEditingController();
+  final TextEditingController _loginPasswordController =
+      TextEditingController();
 
+  final TextEditingController _registerNameController = TextEditingController();
+  final TextEditingController _registerEmailController =
+      TextEditingController();
+  final TextEditingController _registerPasswordController =
+      TextEditingController();
   @override
   void dispose() {
     _loginEmailController.dispose();
     _loginPasswordController.dispose();
+    _registerNameController.dispose();
+    _registerEmailController.dispose();
+    _registerPasswordController.dispose();
+    _apiClient.dispose();
     super.dispose();
+  }
+
+  Future<void> _authenticate(Future<Map<String, dynamic>> request) async {
+    if (_loading) return;
+    setState(() => _loading = true);
+    try {
+      final result = await request;
+      if (!mounted) return;
+      final user = Map<String, dynamic>.from(result['user'] as Map);
+      final route = user['role'] == 'hrd'
+          ? '/hrd/dashboard'
+          : '/pekerja/dashboard';
+      Navigator.pushReplacementNamed(context, route);
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString().replaceFirst('Exception: ', '')),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final role = ModalRoute.of(context)?.settings.arguments as String? ?? 'worker';
+    final role =
+        ModalRoute.of(context)?.settings.arguments as String? ?? 'worker';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
@@ -119,7 +157,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: DefaultTabController(
                     length: 2,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 36.0, vertical: 28.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 36.0,
+                        vertical: 28.0,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -128,7 +169,10 @@ class _LoginPageState extends State<LoginPage> {
                             indicatorWeight: 3,
                             labelColor: Colors.black87,
                             unselectedLabelColor: Colors.black38,
-                            labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                            labelStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
                             tabs: [
                               Tab(text: 'Masuk'),
                               Tab(text: 'Daftar'),
@@ -163,7 +207,11 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           const Text(
             'Email atau Nomor HP',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
           const SizedBox(height: 6),
           SizedBox(
@@ -173,7 +221,11 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                 hintText: 'Contoh: budi@gmail.com',
                 hintStyle: const TextStyle(fontSize: 13, color: Colors.black38),
-                prefixIcon: const Icon(Icons.person_outline, size: 20, color: Colors.black45),
+                prefixIcon: const Icon(
+                  Icons.person_outline,
+                  size: 20,
+                  color: Colors.black45,
+                ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 8),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -192,17 +244,29 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const Text(
                 'Kata Kunci',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
               ),
               GestureDetector(
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Tautan pemulihan kata kunci akan dikirim ke email Anda.')),
+                    const SnackBar(
+                      content: Text(
+                        'Tautan pemulihan kata kunci akan dikirim ke email Anda.',
+                      ),
+                    ),
                   );
                 },
                 child: const Text(
                   'Lupa Kunci?',
-                  style: TextStyle(fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
@@ -215,10 +279,16 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: _obscurePassword,
               decoration: InputDecoration(
                 hintText: '••••••••',
-                prefixIcon: const Icon(Icons.lock_outline, size: 20, color: Colors.black45),
+                prefixIcon: const Icon(
+                  Icons.lock_outline,
+                  size: 20,
+                  color: Colors.black45,
+                ),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    _obscurePassword
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
                     size: 20,
                     color: Colors.black45,
                   ),
@@ -245,12 +315,14 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             height: 44,
             child: ElevatedButton(
-              onPressed: () {
-                final route = role == 'hrd'
-                    ? '/hrd/dashboard'
-                    : '/pekerja/dashboard';
-                Navigator.pushReplacementNamed(context, route);
-              },
+              onPressed: _loading
+                  ? null
+                  : () => _authenticate(
+                      _apiClient.login(
+                        email: _loginEmailController.text.trim(),
+                        password: _loginPasswordController.text,
+                      ),
+                    ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2E6B38),
                 shape: RoundedRectangleBorder(
@@ -260,7 +332,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: const Text(
                 'Masuk',
-                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -270,22 +346,31 @@ class _LoginPageState extends State<LoginPage> {
               Expanded(child: Divider(color: Colors.black12)),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.0),
-                child: Text('Atau', style: TextStyle(fontSize: 12, color: Colors.black38)),
+                child: Text(
+                  'Atau',
+                  style: TextStyle(fontSize: 12, color: Colors.black38),
+                ),
               ),
               Expanded(child: Divider(color: Colors.black12)),
             ],
           ),
           const SizedBox(height: 16),
           _buildSocialButton(
-            iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg',
+            iconUrl:
+                'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg',
             label: 'Lanjutkan dengan Google',
-            onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Aksi berhasil diproses."))),
+            onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Aksi berhasil diproses.")),
+            ),
           ),
           const SizedBox(height: 8),
           _buildSocialButton(
-            iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg',
+            iconUrl:
+                'https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg',
             label: 'Lanjutkan dengan Facebook',
-            onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Aksi berhasil diproses."))),
+            onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Aksi berhasil diproses.")),
+            ),
           ),
         ],
       ),
@@ -299,32 +384,67 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           const Text(
             'Nama Lengkap',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
           const SizedBox(height: 6),
           SizedBox(
             height: 42,
             child: TextField(
+              controller: _registerNameController,
               decoration: InputDecoration(
                 hintText: 'Masukkan nama Anda',
-                contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 12,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
           const SizedBox(height: 12),
           const Text(
             'Email',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
           const SizedBox(height: 6),
           SizedBox(
             height: 42,
             child: TextField(
+              controller: _registerEmailController,
               decoration: InputDecoration(
                 hintText: 'Contoh: email@domain.com',
-                contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 12,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 42,
+            child: TextField(
+              controller: _registerPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                hintText: 'Kata kunci',
+                prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -333,18 +453,30 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             height: 44,
             child: ElevatedButton(
-              onPressed: () {
-                final route = role == 'hrd'
-                    ? '/hrd/dashboard'
-                    : '/pekerja/dashboard';
-                Navigator.pushReplacementNamed(context, route);
-              },
+              onPressed: _loading
+                  ? null
+                  : () => _authenticate(
+                      _apiClient.register(
+                        name: _registerNameController.text.trim(),
+                        email: _registerEmailController.text.trim(),
+                        password: _registerPasswordController.text,
+                        role: role,
+                      ),
+                    ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2E6B38),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 elevation: 0,
               ),
-              child: const Text('Daftar', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Daftar',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         ],
@@ -364,9 +496,7 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: Colors.black12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -374,12 +504,17 @@ class _LoginPageState extends State<LoginPage> {
             Image.network(
               iconUrl,
               height: 16,
-              errorBuilder: (ctx, _, __) => const Icon(Icons.g_mobiledata, size: 20),
+              errorBuilder: (ctx, _, _) =>
+                  const Icon(Icons.g_mobiledata, size: 20),
             ),
             const SizedBox(width: 8),
             Text(
               label,
-              style: const TextStyle(color: Colors.black87, fontSize: 13, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),

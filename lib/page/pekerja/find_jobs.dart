@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../service/app_feedback.dart';
+import '../../service/api_client.dart';
 
 // --- DATA MODEL ---
 class JobItem {
@@ -39,7 +40,7 @@ class JobItem {
 }
 
 class FindJobsPage extends StatefulWidget {
-  const FindJobsPage({Key? key}) : super(key: key);
+  const FindJobsPage({super.key});
 
   @override
   State<FindJobsPage> createState() => _FindJobsPageState();
@@ -59,6 +60,13 @@ class _FindJobsPageState extends State<FindJobsPage> {
   int selectedJobIndex = 0;
   final Set<String> bookmarkedJobIds = <String>{};
   final Set<String> appliedJobIds = <String>{};
+  final ApiClient _apiClient = ApiClient();
+    final TextEditingController _applicantNameController =
+      TextEditingController(text: 'Budi Santoso');
+    final TextEditingController _applicantEmailController =
+      TextEditingController(text: 'budi@example.com');
+  List<JobItem> apiJobs = <JobItem>[];
+  bool isLoadingJobs = true;
 
   // Master Data Lowongan
   final List<JobItem> mockJobs = const [
@@ -139,7 +147,79 @@ class _FindJobsPageState extends State<FindJobsPage> {
     ),
   ];
 
+  List<JobItem> get displayedJobs => apiJobs.isEmpty ? mockJobs : apiJobs;
+
   @override
+  void initState() {
+    super.initState();
+    _loadJobs();
+  }
+
+  Future<void> _loadJobs() async {
+    try {
+      final records = await _apiClient.getJobs();
+      if (!mounted) return;
+      setState(() {
+        apiJobs = records.map(_jobFromApi).toList();
+        isLoadingJobs = false;
+        selectedJobIndex = 0;
+      });
+    } catch (_) {
+      if (mounted) setState(() => isLoadingJobs = false);
+    }
+  }
+
+  JobItem _jobFromApi(Map<String, dynamic> data) {
+    final title = data['title']?.toString() ?? 'Lowongan Baru';
+    final company = data['company']?.toString() ?? 'UMKM Lokal';
+    return JobItem(
+      id: data['id']?.toString() ?? title,
+      logoText: company.substring(0, company.length > 2 ? 2 : 1).toUpperCase(),
+      company: company,
+      title: title,
+      tags: [data['type']?.toString() ?? 'Full-time', 'API'],
+      salary: data['salary']?.toString() ?? 'Negosiasi',
+      location: data['location']?.toString() ?? 'Indonesia',
+      desc: data['description']?.toString() ?? 'Deskripsi belum tersedia.',
+      time: 'Dari API',
+      matchPercentage: 'MATCH',
+      bannerImageUrl: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80',
+      companyProfile: company,
+      responsibilities: const ['Bekerja sesuai deskripsi lowongan.'],
+      qualifications: const ['Memenuhi kualifikasi yang ditentukan perusahaan.'],
+      benefits: const ['Kesempatan berkembang bersama UMKM lokal.'],
+    );
+  }
+
+  Future<void> _applyForJob(JobItem job) async {
+    try {
+      await _apiClient.createApplication(
+        jobId: job.id,
+        jobTitle: job.title,
+        applicantName: _applicantNameController.text,
+        applicantEmail: _applicantEmailController.text,
+      );
+      if (!mounted) return;
+      setState(() => appliedJobIds.add(job.id));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lamaran ${job.title} tersimpan di API.')),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('API belum aktif. Lamaran belum dikirim.')),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _apiClient.dispose();
+    _applicantNameController.dispose();
+    _applicantEmailController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: surfaceCream,
@@ -436,7 +516,7 @@ class _FindJobsPageState extends State<FindJobsPage> {
 
   // --- CONTENT LAYOUT ---
   Widget _buildMainContent() {
-    final selectedJob = mockJobs[selectedJobIndex];
+    final selectedJob = displayedJobs[selectedJobIndex.clamp(0, displayedJobs.length - 1)];
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -457,7 +537,7 @@ class _FindJobsPageState extends State<FindJobsPage> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(color: badgeGreenBg, borderRadius: BorderRadius.circular(12)),
-                        child: Text('${mockJobs.length} Ditemukan', style: const TextStyle(fontSize: 11, color: matchGreen, fontWeight: FontWeight.bold)),
+                        child: Text('${displayedJobs.length} Ditemukan', style: const TextStyle(fontSize: 11, color: matchGreen, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
@@ -471,8 +551,8 @@ class _FindJobsPageState extends State<FindJobsPage> {
                 ],
               ),
               const SizedBox(height: 16),
-              ...List.generate(mockJobs.length, (index) {
-                return _buildJobCard(job: mockJobs[index], index: index);
+              ...List.generate(displayedJobs.length, (index) {
+                return _buildJobCard(job: displayedJobs[index], index: index);
               }),
             ],
           ),
@@ -583,10 +663,7 @@ class _FindJobsPageState extends State<FindJobsPage> {
                 Text(job.time, style: const TextStyle(fontSize: 11, color: textMuted)),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() => appliedJobIds.add(job.id));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Lamaran ${job.title} disimpan.')),
-                    );
+                    _applyForJob(job);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryBrown,
@@ -708,10 +785,7 @@ class _FindJobsPageState extends State<FindJobsPage> {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        setState(() => appliedJobIds.add(job.id));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Lamaran ${job.title} disimpan.')),
-                        );
+                        _applyForJob(job);
                       },
                       icon: const Icon(Icons.send, size: 16),
                       label: const Text('Lamar Sekarang'),
@@ -801,7 +875,7 @@ class _FindJobsPageState extends State<FindJobsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Menampilkan 1 - ${mockJobs.length} dari ${mockJobs.length} lowongan', style: const TextStyle(fontSize: 12, color: textMuted)),
+        Text('Menampilkan 1 - ${displayedJobs.length} dari ${displayedJobs.length} lowongan', style: const TextStyle(fontSize: 12, color: textMuted)),
         Row(
           children: [
             const Icon(Icons.chevron_left, color: textMuted, size: 20),

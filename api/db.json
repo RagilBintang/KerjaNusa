@@ -1,0 +1,99 @@
+{
+  "jobs": [
+    {
+      "id": "1",
+      "company": "Studio Kriya Nusantara",
+      "title": "Staff Desain Konten Kreatif",
+      "location": "Bandung Wetan, Jawa Barat",
+      "salary": "Rp 3.500.000 - Rp 5.000.000",
+      "type": "Magang / PKL",
+      "description": "Mencari kreator muda bersemangat untuk memproduksi visual feed media sosial, reels, dan katalog digital.",
+      "status": "Active"
+    },
+    {
+      "id": "2",
+      "company": "WarungTech Solusindo",
+      "title": "Digital Marketing Specialist",
+      "location": "Jakarta Selatan",
+      "salary": "Rp 6.000.000 - Rp 9.000.000",
+      "type": "Full-time",
+      "description": "Mengembangkan strategi pemasaran digital untuk produk teknologi UMKM.",
+      "status": "Active"
+    },
+    {
+      "id": "3",
+      "company": "CV Berkah Mandiri",
+      "title": "Admin Operasional",
+      "location": "Surabaya, Jawa Timur",
+      "salary": "Rp 3.000.000 - Rp 4.500.000",
+      "type": "Full-time",
+      "description": "Mengelola administrasi dan operasional harian perusahaan.",
+      "status": "Active"
+    }
+  ],
+  "applications": [
+    {
+      "id": "1788704042454",
+      "status": "Pending",
+      "createdAt": "2026-09-06T14:14:02.454Z",
+      "jobId": "1",
+      "jobTitle": "Staff Desain Konten Kreatif",
+      "applicantName": "Budi Santoso",
+      "applicantEmail": "budi@example.com"
+    },
+    {
+      "id": "1788704332969",
+      "status": "Pending",
+      "createdAt": "2026-09-06T14:18:52.969Z",
+      "jobId": "1",
+      "jobTitle": "Staff Desain Konten Kreatif",
+      "applicantName": "Budi Santoso",
+      "applicantEmail": "budi@example.com"
+    },
+    {
+      "id": "1788706829347",
+      "status": "Pending",
+      "createdAt": "2026-09-06T15:00:29.347Z",
+      "jobId": "1",
+      "jobTitle": "Staff Desain Konten Kreatif",
+      "applicantName": "Budi Santoso",
+      "applicantEmail": "budi@example.com"
+    }
+  ],
+  "users": [
+    {
+      "id": "e06f452e-4c26-4ef8-b989-5267d3986460",
+      "name": "Bintang123",
+      "email": "ragilbintang@gmial.com",
+      "role": "worker",
+      "phone": "",
+      "bio": "",
+      "skills": [],
+      "createdAt": "2026-09-06T15:00:20.146Z",
+      "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
+    },
+    {
+      "id": "c9b2d430-bb7c-45ea-8703-5c6ce4968b8d",
+      "name": "aku",
+      "email": "bintang@gmail.com",
+      "role": "hrd",
+      "phone": "",
+      "bio": "",
+      "skills": [],
+      "createdAt": "2026-09-06T15:01:12.180Z",
+      "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
+    }
+  ],
+  "sessions": [
+    {
+      "token": "1950650e18719d3b1e6ee2dbab3aad43e423c760a049289284b6b0d43ac41476",
+      "userId": "e06f452e-4c26-4ef8-b989-5267d3986460",
+      "createdAt": "2026-09-06T15:00:20.147Z"
+    },
+    {
+      "token": "ec088539ade081abe33b4cdb9e09a164730171d0e36a31b19dbdb96f35bd4199",
+      "userId": "c9b2d430-bb7c-45ea-8703-5c6ce4968b8d",
+      "createdAt": "2026-09-06T15:01:12.180Z"
+    }
+  ]
+}

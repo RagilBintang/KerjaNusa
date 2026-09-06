@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../service/app_feedback.dart';
 
 class ApplicationsPage extends StatelessWidget {
-  const ApplicationsPage({Key? key}) : super(key: key);
+  const ApplicationsPage({super.key});
 
   // Definisi Warna dari Tailwind Config
   static const Color surfaceCream = Color(0xFFFFF8F6);
@@ -105,7 +105,7 @@ class ApplicationsPage extends StatelessWidget {
           // CTA Button
           const SizedBox(height: 32),
           ElevatedButton(
-            onPressed: () => AppFeedback.show('Form posting lowongan siap digunakan.'),
+            onPressed: () => Navigator.pushNamed(context, '/hrd/create-job'),
             style: ElevatedButton.styleFrom(
               backgroundColor: businessTerracotta,
               foregroundColor: Colors.white,

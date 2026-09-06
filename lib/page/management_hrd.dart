@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../service/app_feedback.dart';
 
 class JobManagementPage extends StatefulWidget {
-  const JobManagementPage({Key? key}) : super(key: key);
+  const JobManagementPage({super.key});
 
   @override
   State<JobManagementPage> createState() => _JobManagementPageState();
@@ -94,7 +94,7 @@ class _JobManagementPageState extends State<JobManagementPage> {
           _sidebarItem(Icons.settings_outlined, 'Settings'),
           const SizedBox(height: 12),
           ElevatedButton.icon(
-            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Aksi berhasil diproses."))),
+            onPressed: () => Navigator.pushNamed(context, '/hrd/create-job'),
             icon: const Icon(Icons.add, size: 18),
             label: const Text('+ Post a Job', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
             style: ElevatedButton.styleFrom(

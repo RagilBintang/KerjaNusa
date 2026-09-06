@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../service/app_feedback.dart';
 
 class ProfileHrdPage extends StatefulWidget {
-  const ProfileHrdPage({Key? key}) : super(key: key);
+  const ProfileHrdPage({super.key});
 
   @override
   State<ProfileHrdPage> createState() => _ProfileHrdPageState();

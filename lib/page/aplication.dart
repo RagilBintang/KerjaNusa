@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../service/app_feedback.dart';
 
 class ApplicationsPage extends StatefulWidget {
-  const ApplicationsPage({Key? key}) : super(key: key);
+  const ApplicationsPage({super.key});
 
   @override
   State<ApplicationsPage> createState() => _ApplicationsPageState();
@@ -343,13 +343,26 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                 const Text('Showing 1 to 4 of 142 results', style: TextStyle(fontSize: 12, color: textMuted)),
                 Row(
                   children: [
-                    _buildPaginationButton('Previous', isEnabled: false),
+                    _buildPaginationButton(
+                      'Previous',
+                      isEnabled: currentPage > 1,
+                      onPressed: () => setState(() => currentPage--),
+                    ),
                     const SizedBox(width: 4),
                     _buildPageNumberButton(1, isActive: currentPage == 1),
                     _buildPageNumberButton(2, isActive: currentPage == 2),
                     _buildPageNumberButton(3, isActive: currentPage == 3),
                     const SizedBox(width: 4),
-                    _buildPaginationButton('Next', isEnabled: true),
+                    _buildPaginationButton(
+                      'Next',
+                      isEnabled: currentPage < 3,
+                      onPressed: () {
+                        setState(() => currentPage++);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Halaman $currentPage dibuka.')),
+                        );
+                      },
+                    ),
                   ],
                 )
               ],
@@ -482,9 +495,13 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
   }
 
   // --- PAGINATION WIDGETS ---
-  Widget _buildPaginationButton(String label, {required bool isEnabled}) {
+  Widget _buildPaginationButton(
+    String label, {
+    required bool isEnabled,
+    required VoidCallback onPressed,
+  }) {
     return OutlinedButton(
-      onPressed: isEnabled ? () {} : null,
+      onPressed: isEnabled ? onPressed : null,
       style: OutlinedButton.styleFrom(
         foregroundColor: isEnabled ? textDark : textMuted,
         side: const BorderSide(color: borderGrey),
