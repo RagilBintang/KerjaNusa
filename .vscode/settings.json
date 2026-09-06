@@ -1,0 +1,11 @@
+{
+    "liveshare.allowGuestDebugControl": true,
+    "liveshare.allowGuestTaskControl": true,
+    "liveshare.alwaysFollowHost": true,
+    "liveshare.anonymousGuestApproval": "accept",
+    "liveshare.diagnosticLogging": true,
+    "liveshare.diagnosticMode": true,
+    "liveshare.guestApprovalRequired": true,
+    "liveshare.notebooks.allowGuestExecuteCells": true,
+    "liveshare.publishWorkspaceInfo": true
+}
